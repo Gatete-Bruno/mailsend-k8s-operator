@@ -1,23 +1,23 @@
----
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.13.0
-  name: emailsenderconfigs.email.batman.example.com
+  creationTimestamp: null
+  name: emails.email.batman.example.com
 spec:
   group: email.batman.example.com
   names:
-    kind: EmailSenderConfig
-    listKind: EmailSenderConfigList
-    plural: emailsenderconfigs
-    singular: emailsenderconfig
+    kind: Email
+    listKind: EmailList
+    plural: emails
+    singular: email
   scope: Namespaced
   versions:
   - name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Define the EmailSenderConfig custom resource
+        description: Email is the Schema for the emails API
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -32,30 +32,30 @@ spec:
           metadata:
             type: object
           spec:
-            description: Define the EmailSenderConfigSpec struct with the new field
-              for Mailgun configuration
+            description: EmailSpec defines the desired state of Email
             properties:
-              apiTokenSecretRef:
+              body:
                 type: string
-              mailgunConfig:
-                description: Define the MailgunConfig struct
-                properties:
-                  apiKeySecretRef:
-                    type: string
-                  domain:
-                    type: string
-                type: object
-              senderEmail:
+              recipientEmail:
+                type: string
+              senderConfigRef:
+                type: string
+              subject:
                 type: string
             required:
-            - apiTokenSecretRef
-            - senderEmail
+            - body
+            - recipientEmail
+            - senderConfigRef
+            - subject
             type: object
           status:
-            description: Define the EmailSenderConfigStatus struct
+            description: EmailStatus defines the observed state of Email
             properties:
-              lastUpdateTime:
-                format: date-time
+              deliveryStatus:
+                type: string
+              error:
+                type: string
+              messageId:
                 type: string
             type: object
         type: object
@@ -63,3 +63,9 @@ spec:
     storage: true
     subresources:
       status: {}
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: null
+  storedVersions: null
